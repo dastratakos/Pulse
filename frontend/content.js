@@ -20,14 +20,14 @@ setTimeout(function () {
     console.log("i: " + i + ", title: " + title);
     console.log("snippet: " + snippet);
 
-    postData(i, results, target, title, snippet);
+    postData(i, results, title, snippet);
   }
 // TODO: this timeout number is arbitrary...
 }, 100);
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, results, _, title, snippet) {
+function postData(i, results, title, snippet) {
   const xhr = new XMLHttpRequest();
   const url = `${BASE_URL}predict?title=${title}&snippet=${snippet}`;
   xhr.open("GET", url);
