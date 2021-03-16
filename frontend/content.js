@@ -1,4 +1,4 @@
-const BASE_URL = "https://pulse-sentiment.heroku app.com";
+const BASE_URL = "https://pulse-sentiment.herokuapp.com/";
 
 /* Wait for content to load. */
 setTimeout(function () {
