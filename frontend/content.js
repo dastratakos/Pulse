@@ -1,50 +1,29 @@
-const BASE_URL = "http://localhost:5000/";
+const BASE_URL = "https://pulse-sentiment.heroku app.com";
 
 /* Wait for content to load. */
 setTimeout(function () {
   // TODO: verify that these class names work on other machines
   /* For "All" Search. */
   // const results = document.getElementsByClassName("LC20lb");
-  // const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
 
   /* For "News" Search. */
   const results = document.getElementsByClassName("JheGif nDgy9d");
-  // const target = document.getElementsByClassName("gsfi")[0].value;
 
   console.log("Running model on " + results.length + " search results");
-  // console.log("Target: " + target);
 
-  tempFunc(results, 0);
+  for (var i = 0; i < results.length; i++) {
+    /* Remove ellipses. */
+    var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+    var snippet = results[i].parentElement.childNodes[2].childNodes[0]
+                  .textContent;
 
-  // for (var i = 0; i < results.length; i++) {
-  //   /* Remove ellipses. */
-  //   var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
-  //   var snippet = results[i].parentElement.childNodes[2].childNodes[0]
-  //                 .textContent;
+    console.log("i: " + i + ", title: " + title);
+    console.log("snippet: " + snippet);
 
-  //   console.log("i: " + i + ", title: " + title);
-  //   console.log("snippet: " + snippet);
-
-  //   postData(i, results, target, title, snippet);
-  // }
+    postData(i, results, target, title, snippet);
+  }
 // TODO: this timeout number is arbitrary...
 }, 100);
-
-/* Calls postData serially. */
-function tempFunc(results, i) {
-  if (i == results.length)
-    return;
-  
-  /* Remove ellipses. */
-  var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
-  var snippet = results[i].parentElement.childNodes[2].childNodes[0]
-                .textContent;
-
-  console.log("i: " + i + ", title: " + title);
-  console.log("snippet: " + snippet);
-
-  postData(i, results, "", title, snippet);
-}
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
@@ -57,7 +36,6 @@ function postData(i, results, _, title, snippet) {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       showResponse(i, results, xhr.responseText, title, snippet);
-      tempFunc(results, i + 1);
     }
   }
 }
