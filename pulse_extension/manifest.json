@@ -1,8 +1,14 @@
 {
   "manifest_version": 2,
   "name": "Pulse",
-  "description": "Runs sentiment analysis on search result titles",
-  "version": "0.1",
+  "description": "Runs sentiment analysis on News search result titles",
+  "version": "0.0.0.1",
+
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
 
   "browser_action": {
     "default_popup": "popup.html",
