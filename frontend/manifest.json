@@ -15,6 +15,14 @@
     "default_title": "Pulse"
   },
 
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "http://localhost/",
+    "https://pulse-sentiment.herokuapp.com/*",
+    "https://www.google.com/search*"
+  ],
+
   "content_scripts": [
     {
       "matches": ["https://www.google.com/search*"],
