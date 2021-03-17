@@ -107,7 +107,7 @@ function createFeedbackFormLabel() {
 
 function createFeedbackFormButton(correct, res, title, snippet) {
   const button = document.createElement("form");
-  // button.classList.add("pulse-feedback-label" + (yes ? "" : "-last"));
+  button.classList.add("pulse-feedback-label" + (correct === "Negative" ? "-last" : ""));
   button.classList.add("pulse-feedback-label");
   button.addEventListener("submit", (event) => {
     event.preventDefault();

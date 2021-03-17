@@ -44,6 +44,7 @@
   width: fit-content;
   float: right;
   padding: 5px 0 5px 5px;
+  margin: 0;
 }
 
 .pulse-feedback-label-pulse {
