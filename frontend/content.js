@@ -36,6 +36,7 @@ function tempFunc(results, i) {
   
   /* Remove ellipses. */
   var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+  // * This only works for the News tab (not All search)
   var snippet = results[i].parentElement.childNodes[2].childNodes[0]
                 .textContent;
 
@@ -88,23 +89,6 @@ function createCircle(res) {
 }
 
 /* Create "Pulse: Was this correct?" label. */
-function createFeedbackFormLabelOld() {
-  const label = document.createElement("p");
-  label.classList.add("pulse-feedback-label");
-  
-  const labelPulse = document.createElement("span");
-  labelPulse.classList.add("pulse-feedback-label-pulse");
-
-  const labelPulseText = document.createTextNode("Pulse:");
-  labelPulse.appendChild(labelPulseText);
-  const labelText = document.createTextNode(" What was the correct label?");
-  
-  label.appendChild(labelPulse);
-  label.appendChild(labelText);
-  return label;
-}
-
-/* Create "Pulse: Was this correct?" label. */
 function createFeedbackFormLabel() {
   const label = document.createElement("p");
   label.classList.add("pulse-feedback-label");
@@ -114,7 +98,7 @@ function createFeedbackFormLabel() {
 
   const labelPulseText = document.createTextNode("Pulse:");
   labelPulse.appendChild(labelPulseText);
-  const labelText = document.createTextNode(" Feedback");
+  const labelText = document.createTextNode(" Correct label?");
   
   label.appendChild(labelPulse);
   label.appendChild(labelText);
@@ -136,22 +120,6 @@ function createFeedbackFormButton(correct, res, title, snippet) {
   
   button.appendChild(buttonInput);
   return button;
-}
-
-/* Create the feedback form. */
-function createFeedbackFormOld(res, title, snippet) {
-  const feedbackForm = document.createElement("div");
-  feedbackForm.classList.add("pulse-feedback");
-
-  feedbackForm.appendChild(createFeedbackFormLabel());
-  feedbackForm.appendChild(
-    createFeedbackFormButton("Positive", res, title, snippet));
-  feedbackForm.appendChild(
-    createFeedbackFormButton("Neutral", res, title, snippet));
-  feedbackForm.appendChild(
-    createFeedbackFormButton("Negative", res, title, snippet));
-
-  return feedbackForm;
 }
 
 /* Create the feedback form. */
@@ -180,12 +148,16 @@ function findAncestor(el, cls) {
 function showResponse(i, results, res, title, snippet) {
   console.log(`Showing response ${i}: ${res}`);
   // const parent = results[i].parentElement.parentElement.parentElement;
-  // const parent = findAncestor(results[i], "nChh6e").parentElement;
   const gcard = findAncestor(results[i], "nChh6e");
-  gcard.style.overflow = "visible";
-  const parent = findAncestor(results[i], "dbsr");    /* Works for feedback on "Top news" cards. */
+  if (gcard) gcard.style.overflow = "visible";
+  /* For News search results. */
+  var parent = findAncestor(results[i], "dbsr");
+  /* For All search. */
+  // if (!parent)
+  //   parent = results[i].parentElement.parentElement.parentElement;
   
-  // parent.appendChild(createCircle(res));
-  parent.insertBefore(createCircle(res), parent.childNodes[0]);
-  parent.appendChild(createFeedbackForm(res, title, snippet));
+  if (parent) {
+    parent.insertBefore(createCircle(res), parent.childNodes[0]);
+    parent.appendChild(createFeedbackForm(res, title, snippet));
+  }
 }
