@@ -1,3 +1,4 @@
+// const BASE_URL = "https://pulse-sentiment.herokuapp.com/";
 const BASE_URL = "http://localhost:5000/";
 
 /* Wait for content to load. */
@@ -5,15 +6,13 @@ setTimeout(function () {
   // TODO: verify that these class names work on other machines
   /* For "All" Search. */
   // const results = document.getElementsByClassName("LC20lb");
-  // const target = document.getElementsByClassName("gLFyf gsfi")[0].value;
 
   /* For "News" Search. */
   const results = document.getElementsByClassName("JheGif nDgy9d");
-  // const target = document.getElementsByClassName("gsfi")[0].value;
+  /* Alternative News cards. */
+  // const results = document.getElementsByClassName("I1HL6b nDgy9d");
 
   console.log("Running model on " + results.length + " search results");
-  // console.log("Target: " + target);
-
   tempFunc(results, 0);
 
   // for (var i = 0; i < results.length; i++) {
@@ -37,18 +36,19 @@ function tempFunc(results, i) {
   
   /* Remove ellipses. */
   var title = results[i].childNodes[0].textContent.replace(/\.{3,}/gi, "");
+  // * This only works for the News tab (not All search)
   var snippet = results[i].parentElement.childNodes[2].childNodes[0]
                 .textContent;
 
   console.log("i: " + i + ", title: " + title);
   console.log("snippet: " + snippet);
 
-  postData(i, results, "", title, snippet);
+  postData(i, results, title, snippet);
 }
 
 /* ==================== HTTP HELPER FUNCTIONS ==================== */
 
-function postData(i, results, _, title, snippet) {
+function postData(i, results, title, snippet) {
   const xhr = new XMLHttpRequest();
   const url = `${BASE_URL}predict?title=${title}&snippet=${snippet}`;
   xhr.open("GET", url);
@@ -98,7 +98,7 @@ function createFeedbackFormLabel() {
 
   const labelPulseText = document.createTextNode("Pulse:");
   labelPulse.appendChild(labelPulseText);
-  const labelText = document.createTextNode(" What was the correct label?");
+  const labelText = document.createTextNode(" Correct label?");
   
   label.appendChild(labelPulse);
   label.appendChild(labelText);
@@ -148,9 +148,16 @@ function findAncestor(el, cls) {
 function showResponse(i, results, res, title, snippet) {
   console.log(`Showing response ${i}: ${res}`);
   // const parent = results[i].parentElement.parentElement.parentElement;
-  const parent = findAncestor(results[i], "nChh6e").parentElement;
+  const gcard = findAncestor(results[i], "nChh6e");
+  if (gcard) gcard.style.overflow = "visible";
+  /* For News search results. */
+  var parent = findAncestor(results[i], "dbsr");
+  /* For All search. */
+  // if (!parent)
+  //   parent = results[i].parentElement.parentElement.parentElement;
   
-  // parent.appendChild(createCircle(res));
-  parent.insertBefore(createCircle(res), parent.childNodes[0]);
-  parent.appendChild(createFeedbackForm(res, title, snippet));
+  if (parent) {
+    parent.insertBefore(createCircle(res), parent.childNodes[0]);
+    parent.appendChild(createFeedbackForm(res, title, snippet));
+  }
 }
